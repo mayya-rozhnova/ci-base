@@ -1,75 +1,76 @@
 #include "Heap.h"
 
-heap::heap(int _size, int _d) {
-  size = _size;
-  d = _d;
-  n = 0;
-  arr = new int[size];
+Dheap::Dheap(int _s, int _d) {
+    size = _s;
+    keys = new int[size];
+    d = _d;
 }
 
-heap::~heap() {
-  delete[]arr;
+Dheap::~Dheap() {
+    delete []keys;
 }
 
-void heap::swap(int i, int p) {
-  int tmp = arr[p];
-  arr[p] = arr[i];
-  arr[i] = tmp;
+void Dheap::Swap(int i, int j) {
+    if ((i < 0)  || (j < 0) || (i > size) || (j > size))
+        throw std::exception("wrong index");
+    int tmp = keys[i];
+    keys[i] = keys[j];
+    keys[j] = tmp;
 }
 
-void heap::up(int i) {
-  int p = (i - 1) / d;
-  while (p >= 0 && arr[p] > arr[i]) {
-    swap(i, p);
-    i = p;
-    p = (i - 1) / d;
-  }
+void Dheap::Up(int i) {
+    if ((i < 0)  || (i > size))
+        throw std::exception("wrong index");
+    int p = (i - 1) / d;
+    while ((i != 0) && (keys[p] > keys[i])) {
+        Swap(i, p);
+        i = p;
+        p = (i-1) / d;
+    }
 }
 
-int heap::min_child(int i) {
-  int f = i * d + 1;
-  if (f > n - 1)
-    return 0;
-  int l = n - 1;
-  if ((i * d + d) < (n - 1))
-    l = i * d + d;
-  int minc = f;
-  for (int j = f; j <= l; j++)
-  if (arr[minc] > arr[j])
-    minc = j;
-  return minc;
+void Dheap::Down(int i) {
+    if ((i < 0)  || (i > size))
+        throw std::exception("wrong index");
+    int c = MinChild(i);
+    while ((c != -1) && (keys[c] < keys[i])) {
+        Swap(c, i);
+        i = c;
+        c = MinChild(i);
+    }
 }
 
-void heap::down(int i) {
-  int s = min_child(i);
-  while (s != 0 && arr[i] > arr[s]) {
-    swap(s, i);
-    i = s;
-    s = min_child(i);
-  }
+int Dheap::min(int n, int m) {
+    return ((n < m)? n : m);
 }
 
-void heap::hilling() {
-  int j = n - 1;
-  while (j > 0) {
-    swap(j, 0);
-    j--;
-    down(0);
-  }
+int Dheap::MinChild(int i) {
+    if ((i < 0)  || (i > size))
+        throw std::exception("wrong index");
+    int f = i * d + 1;
+    if (f >= size)
+        return -1;
+    int l = min(i * d + d, size - 1);
+    int minc = f;
+    for (int k = f + 1; k <= l; k++)
+        if (keys[minc] > keys[k])
+            minc = k;
+    return minc;
 }
 
-void heap::insert(int key) {
-  if (n == size)
-    throw "heap is full";
-  arr[n] = key;
-  up(n);
-  n++;
+void Dheap::DoHeap() {
+    int s = size;
+    for (int i = s - 1; i >= 0; i--)
+    Down(i);
 }
 
-int heap::deletemin() {
-  int min = arr[0];
-  swap(n - 1, 0);
-  n = n - 1;
-  hilling();
-  return min;
+void Dheap::Psort() {
+    DoHeap();
+    int s = size;
+    while (size > 0) {
+        Swap(0, size-1);
+        size--;
+        Down(0);
+    }
+    size = s;
 }

@@ -1,51 +1,108 @@
 #include "Heap.h"
 #include <gtest.h>
 
-TEST(Heap, can_sort_with_heap) {
-  heap a(8, 2);
-  int _arr[8] = { 4, 5, 9, 1, 2, 7, 8, 6 };
-  int true_arr[8] = { 1, 2, 4, 5, 6, 7, 8 , 9 };
-  for (int i = 0; i < 8; i++)
-    a.insert(_arr[i]);
-  a.hilling();
-  for (int i = 0; i < 8; i++) {
-    _arr[i] = a.deletemin();
-  }
-  bool fl = true;
-  for (int i = 0; i < 8; i++)
-  if (_arr[i] != true_arr[i])
-    fl = false;
-  EXPECT_EQ(fl, true);
+TEST(heap, can_create_heap) {
+  ASSERT_NO_THROW(Dheap(10, 3));
 }
 
-TEST(Heap, can_swap) {
-  heap a(3, 2);
-  a.insert(2);
-  a.insert(1);
-  a.up(1);
-  EXPECT_EQ(a.deletemin(), 1);
+TEST(heap, cant_swap_with_wrong_index) {
+  Dheap h(4, 2);
+  h.keys[0] = 9;
+  h.keys[1] = 1;
+  h.keys[2] = 11;
+  h.keys[3] = 18;
+  ASSERT_ANY_THROW(h.Swap(-5, 3));
+}
+TEST(heap, can_swap) {
+  Dheap h(4, 2);
+  h.keys[0] = 9;
+  h.keys[1] = 1;
+  h.keys[2] = 11;
+  h.keys[3] = 18;
+  Dheap t(4, 2);
+  t.keys[0] = 9;
+  t.keys[1] = 11;
+  t.keys[2] = 1;
+  t.keys[3] = 18;
+  h.Swap(1, 2);
+  for (int i = 0; i < 4; i++)
+    EXPECT_EQ(h.keys[i], t.keys[i]);
 }
 
-TEST(Heap, can_find_minchild) {
-  heap a(3, 2);
-  a.insert(1);
-  a.insert(2);
-  a.insert(5);
-  EXPECT_EQ(a.min_child(0), 1);
+TEST(heap, can_find_minchild) {
+  Dheap h(6, 2);
+  h.keys[0] = 0;
+  h.keys[1] = 2;
+  h.keys[2] = 4;
+  h.keys[3] = 8;
+  h.keys[4] = 6;
+  h.keys[5] = 7;
+  EXPECT_EQ(h.MinChild(1), 4);
 }
 
-TEST(Heap, cant_insert_when_heap_is_full) {
-  heap a(8, 2);
-  int _arr[8] = { 4, 5, 9, 1, 2, 7, 8, 6 };
-  for (int i = 0; i < 8; i++)
-    a.insert(_arr[i]);
-  EXPECT_ANY_THROW(a.insert(1));
+TEST(heap, can_sort_with_d2) {
+  Dheap h(4, 2);
+  h.keys[0] = 9;
+  h.keys[1] = 1;
+  h.keys[2] = 11;
+  h.keys[3] = 18;
+  h.Psort();
+  int t[4] = {18, 11, 9, 1};
+  for (int i = 0; i < 4; i++)
+    EXPECT_EQ(h.keys[i], t[i]);
 }
 
-TEST(Heap, can_down) {
-  heap a(3, 2);
-  a.insert(2);
-  a.insert(1);
-  a.down(0);
-  EXPECT_NE(a.deletemin(), 2);
+TEST(heap, can_sort_with_d3) {
+  Dheap h(7, 3);
+  h.keys[0] = 9;
+  h.keys[1] = 1;
+  h.keys[2] = 11;
+  h.keys[3] = 18;
+  h.keys[4] = 5;
+  h.keys[5] = 7;
+  h.keys[6] = 2;
+  h.Psort();
+  int t[7] = {18, 11, 9, 7, 5, 2, 1};
+  for (int i = 0; i < 7; i++)
+    EXPECT_EQ(h.keys[i], t[i]);
+}
+
+TEST(heap, can_down) {
+  Dheap h(6, 2);
+  h.keys[0] = 8;
+  h.keys[1] = 0;
+  h.keys[2] = 4;
+  h.keys[3] = 2;
+  h.keys[4] = 6;
+  h.keys[5] = 7;
+  Dheap t(6, 2);
+  t.keys[0] = 0;
+  t.keys[1] = 2;
+  t.keys[2] = 4;
+  t.keys[3] = 8;
+  t.keys[4] = 6;
+  t.keys[5] = 7;
+  h.Down(0);
+  for (int i = 0; i < 6; i++)
+  EXPECT_EQ(h.keys[i], t.keys[i]);
+}
+
+TEST(heap, can_up) {
+  Dheap h(6, 2);
+  h.keys[0] = 1;
+  h.keys[1] = 3;
+  h.keys[2] = 4;
+  h.keys[3] = 6;
+  h.keys[4] = 0;
+  h.keys[5] = 8;
+  Dheap t(6, 2);
+  t.keys[0] = 0;
+  t.keys[1] = 1;
+  t.keys[2] = 4;
+  t.keys[3] = 6;
+  t.keys[4] = 3;
+  t.keys[5] = 8;
+  h.Up(4);
+  for (int i = 0; i < 6; i++)
+  EXPECT_EQ(h.keys[i], t.keys[i]);
 }

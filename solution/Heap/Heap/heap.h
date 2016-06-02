@@ -1,22 +1,21 @@
 #ifndef SOLUTION_HEAP_HEAP_HEAP_H_
 #define SOLUTION_HEAP_HEAP_HEAP_H_
+#include <iostream>
 
-class heap {
- private:
-  int size;
-  int d;
-  int* arr;
-  int n;
+class Dheap {
  public:
-  int min_child(int i);
-  void up(int i);
-  void down(int i);
-  heap(int _size, int _d);
-  ~heap();
-  void hilling();
-  void insert(int key);
-  int deletemin();
-  void swap(int i, int p);
+    int d;
+    int size;
+    int *keys;
+    Dheap(int _s, int _d);
+    ~Dheap();
+    void Swap(int i, int j);
+    void Up(int i);
+    void Down(int i);
+    int min(int n, int m);
+    int MinChild(int i);
+    void DoHeap();
+    void Psort();
 };
 
 #endif  //  SOLUTION_HEAP_HEAP_HEAP_H_
