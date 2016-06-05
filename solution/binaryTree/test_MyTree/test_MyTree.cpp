@@ -38,7 +38,7 @@ TEST(bin, revround) {
     G->key = 25;
     G->left = NULL;
     G->right = NULL;
-	int* arr = new int[7];
+    int* arr = new int[7];
     arr = revround(A);
   for (int i = 0; i < 7; i++)
     EXPECT_EQ(arr2[i], arr[i]);
@@ -122,7 +122,7 @@ TEST(bin, dirround) {
     G->key = 25;
     G->left = NULL;
     G->right = NULL;
-	int* arr = new int[7];
+    int* arr = new int[7];
     arr = dirround(A);
   for (int i = 0; i < 7; i++)
     EXPECT_EQ(arr2[i], arr[i]);
